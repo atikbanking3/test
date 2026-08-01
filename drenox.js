@@ -5931,8 +5931,9 @@ case "antilink": {
     const action = args[2] ? args[2].toLowerCase() : null;  // Changed from args[1]
 
     if (!action) return m.reply("ᴜsᴀɢᴇ: ᴀɴᴛɪʟɪɴᴋ ᴡᴀʀɴ ᴏɴ/ᴏғғ | ᴀɴᴛɪʟɪɴᴋ ᴋɪᴄᴋ ᴏɴ/ᴏғғ | ᴀɴᴛɪʟɪɴᴋ ᴅᴇʟᴇᴛᴇ ᴏɴ/ᴏғғ");
-
-        if (mode === "warn") {
+	
+	    if (action === "on") {
+	        if (mode === "warn") {
             setSetting(m.chat, "antilink", "warn");
             m.reply("🛡️ ᴀɴᴛɪʟɪɴᴋ ᴇɴᴀʙʟᴇᴅ ɪɴ *ᴡᴀʀɴ ᴍᴏᴅᴇ*\n\n⚠️ ᴜsᴇʀs ᴡɪʟʟ ʙᴇ ᴋɪᴄᴋᴇᴅ ᴀғᴛᴇʀ 3 ᴡᴀʀɴɪɴɢs");
         } else if (mode === "kick") {
