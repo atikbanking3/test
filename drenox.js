@@ -6407,32 +6407,27 @@ case 'song': {
     const video = search.videos[0]
 
     // 2️⃣ API Call
-    const api = `https://api.ootaizumi.web.id/downloader/youtube`
-    const { data } = await axios.get(api, {
-      params: {
-        url: video.url,
-        format: 'mp3'
-      }
-    })
+    const api = `https://apis.davidcyril.name.ng/download/savetube?url=${encodeURIComponent(video.url)}&format=mp3`
+    const { data } = await axios.get(api)
 
-    if (!data.status || !data.result?.download) {
+    if (!data.success || !data.data?.download_url) {
       throw new Error('Download failed')
     }
 
-    const result = data.result
+    const result = data.data
 
     // 3️⃣ Send Audio
     await bad.sendMessage(
       m.chat,
       {
-        audio: { url: result.download },
+        audio: { url: result.download_url },
         mimetype: 'audio/mpeg',
         fileName: `${result.title}.mp3`,
         contextInfo: {
           externalAdReply: {
             title: result.title,
-            body: result.author?.channelTitle || 'YouTube Audio',
-            thumbnailUrl: result.thumbnail,
+            body: 'YouTube Audio',
+            thumbnailUrl: result.cover,
             sourceUrl: video.url,
             mediaType: 1,
             renderLargerThumbnail: true
@@ -6461,29 +6456,18 @@ case "tiktok": {
     
     try {
         await bad.sendMessage(m.chat, {react: {text: '⏳', key: m.key}});
-        const res = await axios.get(`https://api.giftedtech.co.ke/api/download/tiktokdl?url=${encodeURIComponent(text)}&apikey=gifted`);
+        const res = await axios.get(`https://apis.davidcyril.name.ng/tiktok?url=${encodeURIComponent(text)}`);
         const data = res.data;
         
         if (data.success) {
             await bad.sendMessage(m.chat, {
-                video: { url: data.result.video_no_watermark },
+                video: { url: data.result.video },
                 caption: `✅ *TikTok Download Success*\n\n📝 *Title:* ${data.result.title}\n👤 *Author:* ${data.result.author}`,
                 mimetype: 'video/mp4'
             }, { quoted: m });
             await bad.sendMessage(m.chat, {react: {text: '✅', key: m.key}});
         } else {
-            // Fallback to another API if gifted fails
-            const res2 = await axios.get(`https://api.maher-zubair.tech/download/tiktok?url=${encodeURIComponent(text)}`);
-            if (res2.data.status === 200) {
-                await bad.sendMessage(m.chat, {
-                    video: { url: res2.data.result.video },
-                    caption: `✅ *TikTok Download Success*`,
-                    mimetype: 'video/mp4'
-                }, { quoted: m });
-                await bad.sendMessage(m.chat, {react: {text: '✅', key: m.key}});
-            } else {
-                throw new Error('Failed to fetch video');
-            }
+            throw new Error('Failed to fetch video');
         }
     } catch (error) {
         console.error('TikTok Error:', error.message);
@@ -6580,7 +6564,7 @@ case "igdl": {
     
     try {
         await bad.sendMessage(m.chat, {react: {text: '⏳', key: m.key}});
-        const res = await axios.get(`https://api.giftedtech.co.ke/api/download/instadl?url=${encodeURIComponent(text)}&apikey=gifted`);
+        const res = await axios.get(`https://apis.davidcyril.name.ng/instagram?url=${encodeURIComponent(text)}`);
         const data = res.data;
         
         if (data.success) {
@@ -6613,7 +6597,7 @@ case "fbdl": {
     
     try {
         await bad.sendMessage(m.chat, {react: {text: '⏳', key: m.key}});
-        const res = await axios.get(`https://api.giftedtech.co.ke/api/download/facebook?url=${encodeURIComponent(text)}&apikey=gifted`);
+        const res = await axios.get(`https://apis.davidcyril.name.ng/facebook?url=${encodeURIComponent(text)}`);
         const data = res.data;
         
         if (data.success) {
@@ -6910,14 +6894,14 @@ case 'ytaudio': {
   await loading();
   
   try {
-    const apiUrl = `${NEXORACLE_API}downloader/ytmp3?apikey=${NEXORACLE_KEY}&url=${encodeURIComponent(text)}`;
+    const apiUrl = `https://apis.davidcyril.name.ng/download/savetube?url=${encodeURIComponent(text)}&format=mp3`;
     const data = await fetchJson(apiUrl);
     
-    if (data.status && data.result?.download) {
+    if (data.success && data.data?.download_url) {
       await bad.sendMessage(m.chat, {
-        audio: { url: data.result.download },
+        audio: { url: data.data.download_url },
         mimetype: 'audio/mpeg',
-        fileName: `${data.result.title || 'audio'}.mp3`
+        fileName: `${data.data.title || 'audio'}.mp3`
       }, { quoted: m });
     } else {
       reply('❌ Failed to download audio.');
@@ -6939,21 +6923,21 @@ case 'ytvideo': {
   await loading();
   
   try {
-    const apiUrl = `${NEXORACLE_API}downloader/ytmp4?apikey=${NEXORACLE_KEY}&url=${encodeURIComponent(text)}`;
+    const apiUrl = `https://apis.davidcyril.name.ng/download/savetube?url=${encodeURIComponent(text)}&format=mp4`;
     const data = await fetchJson(apiUrl);
     
-    if (data.status && data.result?.video) {
+    if (data.success && data.data?.download_url) {
       await bad.sendMessage(m.chat, {
-        video: { url: data.result.video },
-        mimetype: 'video/mp4',
-        fileName: `${data.result.title || 'video'}.mp4`
+        video: { url: data.data.download_url },
+        caption: `✅ *YouTube Video*`,
+        mimetype: 'video/mp4'
       }, { quoted: m });
     } else {
-      reply('❌ Failed to download.');
+      reply('❌ Failed to download video.');
     }
   } catch (err) {
     console.error(err);
-    reply('❌ Failed to download.');
+    reply('❌ Failed to download video.');
   }
 }
 break;
