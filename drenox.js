@@ -3715,15 +3715,11 @@ case 'autoreply': {
   }
   
   global.autoReply = action === 'on'
-  reply(`ᴀᴜᴛᴏ ʀᴇᴘʟʏ ${action === 'on' ? 'ᴇɴᴀʙʟᴇᴅ' : 'ᴅɪsᴀʙʟᴇᴅ'} ✅`)
-}
-break
-
-
-}
-break
-
-case 'autotyping': {
+	  reply(`ᴀᴜᴛᴏ ʀᴇᴘʟʏ ${action === 'on' ? 'ᴇɴᴀʙʟᴇᴅ' : 'ᴅɪsᴀʙʟᴇᴅ'} ✅`)
+	}
+	break
+	
+	case 'autotyping': {
   if (!isCreator) return reply('ᴏᴡɴᴇʀ ᴏɴʟʏ.')
   
   const action = args[0]?.toLowerCase()
